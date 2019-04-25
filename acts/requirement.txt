@@ -1,0 +1,6 @@
+Flask
+requests
+flask-sqlalchemy
+flask-cors
+request
+pybase64

@@ -1,0 +1,40 @@
+start AWS instance
+Allow traffic on port 5000
+	Go to AWS dashboard.
+	search for security groups.
+	select your instance and scroll down.
+	click on edit.
+	add custom TCP rule and select port 5000.
+	restart the instance.
+	Now, port 5000 can be used for instance.
+	
+connect to instance using ssh
+
+install python
+	sudo apt-get install python
+install pip
+	sudo apt-get update
+	sudo apt-get install python-pip
+install flask
+	pip install flask
+install flask_login
+	pip install flask_login
+install sqlalchemy
+	pip install flask_sqlalchemy
+install CORS
+	pip install flask_cors
+install bcrypt
+	pip install flask_bcrypt	
+install http request
+	pip install request
+install pybase64
+	pip install pybase64
+sudo apt-get update
+
+transfer all files to instance using scp.
+
+The App runs on "0.0.0.0"on port:5000
+
+x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-xx-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x
+
+

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+<style>
+body {
+    background:url(https://inspiredology.com/wp-content/uploads/2010/04/maidu_color.jpg);
+}
+
+.form_bg {
+    background-color:#eee;
+    color:#666;
+    padding:20px;
+    border-radius:10px;
+    position: absolute;
+    border:1px solid #fff;
+    margin: auto;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 370px;
+    height: 350px;
+    box-shadow: rgba(0, 0, 0, 0.6) 40px 40px 40px;
+}
+.align-center {
+    text-align:center;
+}
+
+</style>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="form_bg">
+               <form id="register-form" method="post" action="/api/v1/login" target = "_top">
+                    <h2 class="text-center">LOG IN</h2>
+            <br>
+                    <div class="from-group">
+                        <input type="text" class="form-control" placeholder=" Username" name="username" required  /> <br>
+                    </div>
+                    <div class="form-group">
+                        <input type="password"  class="form-control" placeholder="Password" name="password" required  />
+                    </div>
+            <br>
+                    <div>
+                        <div class="align-center">
+                            <button type="submit" class="btn btn-danger" name="btn-signup">
+                                <span></span> &nbsp; Log In
+                            </button>
+                        </div>
+                </form>
+            </div>
+                <br>
+        	<div>
+                <br>
+                <center><p><a id="login" href="signup">Sign_UP!!</a> If you dont have an account.</p></center> 
+            </div>    
+        </div>
+</div>
+
+</body>
+</html>
+

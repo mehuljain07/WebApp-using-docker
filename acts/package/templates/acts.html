@@ -1,0 +1,102 @@
+<html>
+<head>
+	<meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Home</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css" integrity="sha384-PmY9l28YgO4JwMKbTvgaS7XNZJ30MK9FAZjjzXtlqyZCqBY6X6bXIkM++IkyinN+" crossorigin="anonymous">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js" integrity="sha384-vhJnz1OVIdLktyixHY4Uk3OHEwdQqPppqYR8+5mjsauETgLOcEynD9oPHhhz18Nw" crossorigin="anonymous"></script>
+	<style>
+		img{border : 2px;}
+	</style>
+</head>
+<script type="text/javascript">
+	function del_act(actId){
+		var xhr = new XMLHttpRequest();
+        	xhr.onreadystatechange = function () {
+            		if (xhr.readyState === 4 && xhr.status === 200){
+					alert("Act Deleted");
+					window.location.reload(true);
+			}
+            	}        
+        	xhr.open('delete', '/api/v1/acts/'+actId, true);
+        	xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+        	xhr.send();
+	}
+	 function upvote(actId){
+                // alert(actId)
+                var msg = new Array();
+                msg.push(actId);
+                var xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function(){
+                        if (xhr.readyState === 4 && xhr.status === 200){
+                                alert(xhr.response);
+                                window.location.reload(true);
+                        }
+                }
+                xhr.open('post','/api/v1/acts/upvote',true);
+                xhr.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
+                xhr.send(msg);
+        }
+
+</script>
+
+<body>
+<p><center><font size = "26" face = "Trebuchet MS">SelfieLessAct</font></center></p>
+	<center>
+	<div class = "quote" style="width:80%;margin-left:30">
+	<hr width = "75%">
+	<p style="font-family:garamond;font-size:32;"><I>"Selfless acts are a source of profound meaning for your self and your life."</I></br>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp-Ron Kaufmam</font></p>
+	</div>
+	</center>
+	
+	
+	<div class="container">
+		<nav class="navbar navbar-default">
+				<div class="navbar-header">
+					<a href="#" class="navbar-brand">SELFLESS ACTS</a>
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#abc" aria-expanded="false">
+			        <span class="sr-only">Toggle navigation</span>
+			        <span class="icon-bar"></span>
+			        <span class="icon-bar"></span>
+			        <span class="icon-bar"></span>
+			      </button>
+			  </div>
+			   <div class="collapse navbar-collapse" id="abc">
+				<ul class="nav navbar-nav">
+					<li><a href="home">Home</a></li>
+					<li><a href="#">Contact</a></li>
+					<li><a href="#">Know More</a></li>
+					<li><a href="#">About</a></li>
+				</ul>
+				<ul class="nav navbar-nav navbar-right">
+					<li><a href="addacts">Upload</a></li>
+					<li><a href="http://34.238.62.10:8080/api/v1/login">Log In</a></li>
+				</ul>
+				</div>
+	</nav>
+	<center><h1>{{cat}}</h1></center>
+		{%block content %}
+		<div>
+		<form action = "/api/v1/addacts">
+         		<button type = "submit" >Add Act</button>
+      		</form>      
+		</div>
+		<div class="col-lg-12 col-md-12">
+	          {%for act in acts%}
+	        <div class="cat_disp">
+	          	<h3>{{act.username}}</h3>
+	          	<img src="data:image/png;base64,{{act.imgFile}}">
+	          	<h4><i>{{act.caption}}</i></h4>
+	          	<h4>Upvotes: {{act.upvotes}}</h4>
+	            <button onclick="upvote('{{act.act_id}}')">Upvote</button>
+	            <button onclick="del_act('{{act.act_id}}')">Delete</button>
+	        </div>
+	          {%endfor%}
+        </div>
+        {%endblock content%}
+      </div>
+
+	</div>
+</body>
+</html>

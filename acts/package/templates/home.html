@@ -1,0 +1,112 @@
+<html>
+<head>
+	<meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Home</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css" integrity="sha384-PmY9l28YgO4JwMKbTvgaS7XNZJ30MK9FAZjjzXtlqyZCqBY6X6bXIkM++IkyinN+" crossorigin="anonymous">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js" integrity="sha384-vhJnz1OVIdLktyixHY4Uk3OHEwdQqPppqYR8+5mjsauETgLOcEynD9oPHhhz18Nw" crossorigin="anonymous"></script>
+	<style>
+		img{border : 2px;}
+	</style>
+</head>
+<body>
+<p><center><font size = "26" face = "Trebuchet MS">SelfieLessAct</font></center></p>
+	<center>
+	<div class = "quote" style="width:80%;margin-left:30">
+	<hr width = "75%">
+	<p style="font-family:garamond;font-size:32;"><I>"Selfless acts are a source of profound meaning for your self and your life."</I></br>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp-Ron Kaufmam</font></p>
+	</div>
+	</center>
+	
+	
+	<div class="container">
+		<nav class="navbar navbar-default">
+				<div class="navbar-header">
+					<a href="#" class="navbar-brand">SELFLESS ACTS</a>
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#abc" aria-expanded="false">
+			        <span class="sr-only">Toggle navigation</span>
+			        <span class="icon-bar"></span>
+			        <span class="icon-bar"></span>
+			        <span class="icon-bar"></span>
+			      </button>
+			  </div>
+			   <div class="collapse navbar-collapse" id="abc">
+				<ul class="nav navbar-nav">
+					<li><a href="home">Home</a></li>
+					<li><a href="#">Contact</a></li>
+					<li><a href="#">Know More</a></li>
+					<li><a href="#">About</a></li>
+				</ul>
+				<ul class="nav navbar-nav navbar-right">
+					<li><a href="addacts">Upload</a></li>
+					<li><a href="http://34.238.62.10:8080/api/v1/login">Log In</a></li>
+				</ul>
+				</div>
+	</nav>
+	<center><h1><font face = "Times New Roman" size = "15">Categories</font></h1></center>
+		{%block content %}
+		<div class="col-lg-6 col-sm-6 col-xs-6">
+         		<button class="btn btn-info" onclick = "addCat();" />Add a Category     
+		</div>
+		<div class = "col-lg-6 col-sm-6 col-xs-6 text-right">
+			<button type="button" class="btn btn-primary" onclick="del_user()">Delete User</button>
+		</div>
+		<div class="col-lg-12">
+	          {%for cat in cats%}
+	       	<div class="cat_disp">
+	          		<a href="/api/v1/categories/{{cat.name}}/acts/display" value = "{{cat.name}}"><h2>{{cat.name}}</h2></a><button class="btn btn-danger" onclick="del_cat(this)"><span class="glyphicon glyphicon-trash"></span></button>
+	      	</div>
+	          {%endfor%}
+        </div>
+        {%endblock content%}
+      </div>
+
+	</div>
+	<br><br>
+</body>
+
+<script type="text/javascript">
+    function del_cat(div){
+		//console.log("INside Delete");
+		var ele = div.parentElement.firstChild.nextSibling.firstChild.innerHTML;
+		// console.log(url)
+		var xhr = new XMLHttpRequest();
+       		xhr.onreadystatechange = function(){
+            		if (xhr.readyState === 4 && xhr.status === 200){
+				alert("Category Deleted");
+				window.location.reload(true);
+			}
+			else if (xhr.readyState === 4 && xhr.status === 400){
+				alert(xhr.response);
+			}
+			else if(xhr.readyState === 4 && xhr.status === 401){
+				window.location(xhr.response);
+            		}
+            }
+        xhr.open('delete','/api/v1/categories/'+ele, true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+        xhr.send();
+	}
+
+	function addCat() {
+            	var retVal = prompt("Enter your Category name : ", "Enter here");
+            	var msg =JSON.stringify([retVal]);
+		//console.log(msg);
+		var xhr = new XMLHttpRequest();
+        	xhr.onreadystatechange = function () {
+	            if (xhr.readyState === 4 && xhr.status === 201){
+					alert(xhr.response);
+					window.location.reload(true);
+				}
+				else if(xhr.readyState === 4 && xhr.status === 400){
+					alert(xhr.response);
+				}
+            }
+        	xhr.open('post', '/api/v1/categories', true);
+        	xhr.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
+        	xhr.send(msg);
+        }
+
+</script>
+</html>

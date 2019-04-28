@@ -6,7 +6,7 @@ import docker
 import time
 import threading
 import atexit
-
+import json
 reqCounter=0
 container_count=0
 port_dict={}
@@ -14,14 +14,14 @@ def conStop(id):
 	try:
 		global container_count
 		global port_dict
-		container_count = container_count-1
+		container_count=container_count-1
 		port=list(port_dict.keys())[list(port_dict.values()).index(id)]
 		port_dict.pop(port)
 		client=docker.from_env()
 		container=client.containers.get(id)
 		container.stop()
 		container.remove()
-		time.sleep(2)
+		time.sleep(1)
 	except Exception as e:
 		print(e)
 
@@ -30,12 +30,9 @@ def conStart(port):
 		global container_count
 		global port_dict
 		client=docker.from_env()
-		volume=client.volumes.get('newvolume')
-		image = client.images.pull('ccdocker1/acts:latest')
-		print(volume.name)
-		container=client.containers.create(image,ports={'80/tcp':str(port)},detach=True,tty=True,stdin_open=True,volumes={'Db':{'bind':'/app','mode':'rw'}})
+		container=client.containers.create('acts:latest',ports={'80/tcp':str(port)},detach=True,tty=True,stdin_open=True,volumes={'newvolume':{'bind':'/app','mode':'rw'}})
 		container.start()
-		time.sleep(5)
+		time.sleep(0.5)
 		port_dict[port]=container.id
 		container_count=container_count+1
 	except Exception as e:
@@ -43,7 +40,7 @@ def conStart(port):
 
 def poll():
 	global port_dict
-	client = docker.from_env()
+	client=docker.from_env()
 	print("inside poll()")
 	while True:
 		for port in port_dict.keys():
@@ -84,8 +81,12 @@ def scale():
 			elif(container_count > 3):
 				while(container_count>3):
 					conStop(port_dict[port_dict.keys()[-1]])
+@app.before_first_request
+def initialize():
+	if(container_count < 1):
+		conStart(8000)
 
-@app.route('/', defaults={'path': ''})
+@app.route('/', defaults={'path':''})
 def emptyRequest(path):
 	return str("Path not found"),404
 
@@ -93,9 +94,8 @@ def emptyRequest(path):
 def catch_all(path):
 	global reqCounter
 	global container_count
-	reqCounter = reqCounter+1
-	if(container_count==0):
-		x = conStart(8000)
+	reqCounter=reqCounter+1
+	if(reqCounter==1):
 		t1=threading.Thread(target=poll,name='polls')
 		t2=threading.Thread(target=scale,name='scaleing')
 		t1.daemon=True

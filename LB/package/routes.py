@@ -41,11 +41,11 @@ def conStart(port):
 def poll():
 	global port_dict
 	client=docker.from_env()
-	print("inside poll()")
+	#print("inside poll()")
 	while True:
 		for port in port_dict.keys():
 			try:
-				url = 'http://34.238.62.10:'+str(port)+'/api/v1/_health'
+				url = 'http://127.0.0.1:'+str(port)+'/api/v1/_health'
 				time.sleep(0.01)
 				r = requests.get(url)
 				print(r.status_code)
@@ -61,20 +61,22 @@ def scale():
 		global reqCounter
 		global port_dict
 		count1=reqCounter
+		#print(count1)
 		time.sleep(120)
 		count2=reqCounter
-		if(count2-count1<20):
+		#print(count2)
+		if(count2-count1+1<20):
 			if(container_count>1):
 				while(container_count>1):
 					conStop(port_dict[port_dict.keys()[-1]])
-		if(count2-count1 >=20 and count2-count1<40):
+		if(count2-count1+1 >=20 and count2-count1+1<40):
 			ports = port_dict.keys()
 			if(container_count==1):
 				conStart(sorted(ports)[-1]+1)
 			elif(container_count>2):
 				while(container_count>2):
 					conStop(port_dict[ports[-1]])
-		elif(container_count>=40 and container_count<60):
+		elif(count2-count1+1>=40 and count2-count1+1<60):
 			if(container_count < 3):
 				while(container_count!=3):
 					conStart((sorted(port_dict.keys()))[-1]+1)
@@ -103,8 +105,10 @@ def catch_all(path):
 		t1.start()
 		t2.start()
 
-	port = 8000+(reqCounter % container_count)
-	url = 'http://34.238.62.10:'+str(port)+'/api/v1/'+path
+	port_i = (reqCounter % container_count)
+	port=port_dict.keys()[port_i]
+	#print(port)
+	url = 'http://127.0.0.1:'+str(port)+'/api/v1/'+path
 	header = {'Origin':'34.238.62.10'}
 	try:
 		if(request.method=='GET'):
